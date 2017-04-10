@@ -5,6 +5,12 @@
               jucerVersion="4.3.1">
   <MAINGROUP id="Yt81KF" name="PlayAudioFile">
     <GROUP id="{9DA43E12-8D60-DB3D-6709-47ECDF080216}" name="Source">
+      <FILE id="yxxVqF" name="AoiPlayAudioFile.cpp" compile="1" resource="0"
+            file="Source/AoiPlayAudioFile.cpp"/>
+      <FILE id="rHx8W7" name="AoiPlayAudioFile.hpp" compile="1" resource="0"
+            file="Source/AoiPlayAudioFile.hpp"/>
+      <FILE id="grk0Wk" name="AoiWaveform.cpp" compile="1" resource="0" file="Source/AoiWaveform.cpp"/>
+      <FILE id="edc4jQ" name="AoiWaveform.hpp" compile="1" resource="0" file="Source/AoiWaveform.hpp"/>
       <FILE id="gUFG42" name="MainComponent.h" compile="1" resource="0" file="Source/MainComponent.h"/>
       <FILE id="AZinDS" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>

@@ -10,14 +10,20 @@
 #define MainComponent_h
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "AoiPlayAudioFile.hpp"
+#include "AoiWaveform.hpp"
 
 enum class TransportState : int{
-    Stopped,
-    Starting,
-    Playing,
-    Pausing,
-    Paused,
-    Stoopping
+//    Stopped,
+//    Starting,
+//    Playing,
+//    Pausing,
+//    Paused,
+//    Stoopping
+    NoFile,
+    Play,
+    Stop,
+    Pause
 };
 
 class MainContentComponent   :
@@ -51,11 +57,12 @@ private:
     std::unique_ptr<TextButton> stopButton;
     std::unique_ptr<TextButton> settingButton;
     AudioDeviceManager deviceManager;
-    AudioFormatManager formatManager;
-    std::unique_ptr<AudioFormatReaderSource> readerSource;
-    std::unique_ptr<AudioFormatReader> formatReader;
-    AudioTransportSource transportSource;
-    AudioSourcePlayer sourcePlayer;
+    std::unique_ptr<AoiPlayAudioFile> aoiPlay;
+//    AudioFormatManager formatManager;
+//    std::unique_ptr<AudioFormatReaderSource> readerSource;
+//    std::unique_ptr<AudioFormatReader> formatReader;
+//    AudioTransportSource transportSource;
+//    AudioSourcePlayer sourcePlayer;
     TransportState state;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent);

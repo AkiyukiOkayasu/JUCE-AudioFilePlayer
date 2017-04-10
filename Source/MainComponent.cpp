@@ -15,7 +15,7 @@ MainContentComponent::MainContentComponent()
 //    playButton(new TextButton("playButton")),
 //    stopButton(new TextButton("stopButton")),
 //    settingButton(new TextButton("settingButton")),
-state(TransportState::Stopped)
+state(TransportState::NoFile)
 {
     //C++14 style? : Making smart pointer -> Does not working...
     //openButton = addAndMakeVisible(std::make_unique<TextButton>());
@@ -47,12 +47,13 @@ state(TransportState::Stopped)
     
     setSize (1080, 720);
     
-    formatManager.registerBasicFormats();
-    sourcePlayer.setSource(&transportSource);
-    deviceManager.addAudioCallback(&sourcePlayer);
+//    formatManager.registerBasicFormats();
+//    sourcePlayer.setSource(&transportSource);
+//    deviceManager.addAudioCallback(&sourcePlayer);
     deviceManager.initialise(0, 2, nullptr, true);
     deviceManager.addChangeListener(this);
-    transportSource.addChangeListener(this);
+    aoiPlay = std::make_unique<AoiPlayAudioFile>(deviceManager);
+//    transportSource.addChangeListener(this);
     
 }
 
@@ -94,8 +95,9 @@ void MainContentComponent::paint (Graphics& g)
 
 void MainContentComponent::resized()
 {
-    int margin_width = 30;
-    int button_hight = 30;
+    const int margin_width = 30;
+    const int button_hight = 30;
+
     openButton->setBounds(margin_width, 10, (getWidth() - margin_width * 2) / 2, button_hight);
     settingButton->setBounds(getWidth() / 2, 10, (getWidth() - margin_width * 2) / 2, button_hight);
     playButton->setBounds(margin_width, 50, (getWidth() - margin_width * 2) / 2, button_hight);
@@ -123,24 +125,26 @@ void MainContentComponent::buttonClicked(Button *button)
 //private
 void MainContentComponent::openButtonClicked()
 {
-    std::cout<<"openButton clicked"<<std::endl;
-    transportSource.setSource(nullptr);//
-    FileChooser chooser("Select a audio file to play...", File::nonexistent);
-    if(chooser.browseForFileToOpen())
-    {
-        int maxNumChannles = 2;
-        File file(chooser.getResult());
-        readerSource.reset(new AudioFormatReaderSource(formatManager.createReaderFor(file), true));
-        formatReader.reset(formatManager.createReaderFor(file));
-        double fileSampleRate = formatReader->sampleRate;
-        transportSource.setSource(readerSource.get(),
-                                  0,
-                                  nullptr,
-                                  fileSampleRate,
-                                  maxNumChannles);
-        playButton->setEnabled(true);
-        changeTransportState(TransportState::Stopped);
-    }
+//    std::cout<<"openButton clicked"<<std::endl;
+//    transportSource.setSource(nullptr);//
+//    FileChooser chooser("Select a audio file to play...", File::nonexistent);
+//    if(chooser.browseForFileToOpen())
+//    {
+//        int maxNumChannles = 2;
+//        File file(chooser.getResult());
+//        readerSource.reset(new AudioFormatReaderSource(formatManager.createReaderFor(file), true));
+//        formatReader.reset(formatManager.createReaderFor(file));
+//        double fileSampleRate = formatReader->sampleRate;
+//        transportSource.setSource(readerSource.get(),
+//                                  0,
+//                                  nullptr,
+//                                  fileSampleRate,
+//                                  maxNumChannles);
+//        playButton->setEnabled(true);
+//        changeTransportState(TransportState::Stopped);
+//    }
+    aoiPlay->openDialogAndSetSource();
+    changeTransportState(TransportState::Stop);
 }
 
 void MainContentComponent::settingButtonClicked()
@@ -171,26 +175,27 @@ void MainContentComponent::settingButtonClicked()
 void MainContentComponent::playButtonClicked()
 {
     std::cout<<"playButton clicked"<<std::endl;
-    if(state == TransportState::Stopped || state == TransportState::Paused)
-    {
-        changeTransportState(TransportState::Starting);
-    }
-    else if(state == TransportState::Playing)
-    {
-        changeTransportState(TransportState::Pausing);
-    }
+    changeTransportState(TransportState::Play);
+//    if(state == TransportState::Stop)
+//    {
+//        changeTransportState(TransportState::Play);
+//    }
+//    else if(state == TransportState::Play)
+//    {
+//        changeTransportState(TransportState::Pause);
+//    }
 }
 
 void MainContentComponent::stopButtonClicked()
 {
     std::cout<<"stopButton clicked"<<std::endl;
-    if(state == TransportState::Paused)
+    if(state == TransportState::Pause)
     {
-        changeTransportState(TransportState::Stopped);
+        changeTransportState(TransportState::Stop);
     }
     else
     {
-        changeTransportState(TransportState::Stoopping);
+        changeTransportState(TransportState::Pause);
     }
 }
 
@@ -203,32 +208,29 @@ void MainContentComponent::changeListenerCallback (ChangeBroadcaster* source)
         
         if(setup.outputChannels.isZero())
         {
-            sourcePlayer.setSource(nullptr);
-        }
-        else
-        {
-            sourcePlayer.setSource(&transportSource);
+//            sourcePlayer.setSource(nullptr);
+            aoiPlay->setSource(nullptr);
         }
     }
-    else if(source == &transportSource)
-    {
-        std::cout<<"AudioTransportSource Listner"<<std::endl;
-        if(transportSource.isPlaying())
-        {
-            changeTransportState(TransportState::Playing);
-        }
-        else
-        {
-            if(state == TransportState::Stoopping || state == TransportState::Playing)//if(state == TransportState::Stoopping)???
-            {
-                changeTransportState(TransportState::Stopped);
-            }
-            else if(state == TransportState::Pausing)
-            {
-                changeTransportState(TransportState::Paused);
-            }
-        }
-    }
+//    else if(source == &transportSource)
+//    {
+//        std::cout<<"AudioTransportSource Listner"<<std::endl;
+//        if(transportSource.isPlaying())
+//        {
+//            changeTransportState(TransportState::Playing);
+//        }
+//        else
+//        {
+//            if(state == TransportState::Stoopping || state == TransportState::Playing)//if(state == TransportState::Stoopping)???
+//            {
+//                changeTransportState(TransportState::Stopped);
+//            }
+//            else if(state == TransportState::Pausing)
+//            {
+//                changeTransportState(TransportState::Paused);
+//            }
+//        }
+//    }
 }
 
 void MainContentComponent::changeTransportState(TransportState newState)
@@ -237,35 +239,33 @@ void MainContentComponent::changeTransportState(TransportState newState)
     {
         state = newState;
         switch (state) {
-            case TransportState::Stopped:
-                std::cout<<"Stopped"<<std::endl;
+            case TransportState::NoFile:
+                std::cout<<"NoFile"<<std::endl;
+                playButton->setEnabled(false);
+                stopButton->setEnabled(false);
+                break;
+            case TransportState::Play:
+                std::cout<<"Play"<<std::endl;
+                playButton->setEnabled(false);
+                stopButton->setButtonText("Pause");
+                stopButton->setEnabled(true);
+                aoiPlay->play();
+                break;
+            case TransportState::Stop:
+                std::cout<<"Stop"<<std::endl;
                 playButton->setButtonText("Play");
+                playButton->setEnabled(true);
                 stopButton->setButtonText("Stop");
                 stopButton->setEnabled(false);
-                transportSource.setPosition(0.0);
+                aoiPlay->backToStartPoint();
                 break;
-            case TransportState::Starting:
-                std::cout<<"Starting"<<std::endl;
-                transportSource.start();
-                break;
-            case TransportState::Playing:
-                std::cout<<"Playing"<<std::endl;
-                playButton->setButtonText("Pause");
-                stopButton->setButtonText("Stop");
+            case TransportState::Pause:
+                std::cout<<"Pause"<<std::endl;
+                playButton->setButtonText("Restart");
+                playButton->setEnabled(true);
+                stopButton->setButtonText("Back to head");
                 stopButton->setEnabled(true);
-                break;
-            case TransportState::Pausing:
-                std::cout<<"Pausing"<<std::endl;
-                transportSource.stop();
-                break;
-            case TransportState::Paused:
-                std::cout<<"Paused"<<std::endl;
-                playButton->setButtonText("Resume");
-                stopButton->setButtonText("Return to Zero");
-                break;
-            case TransportState::Stoopping:
-                std::cout<<"Stopping"<<std::endl;
-                transportSource.stop();
+                aoiPlay->stop();
                 break;
         }
     }
