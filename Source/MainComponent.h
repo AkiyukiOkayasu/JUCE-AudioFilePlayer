@@ -14,12 +14,6 @@
 #include "AoiWaveform.hpp"
 
 enum class TransportState : int{
-//    Stopped,
-//    Starting,
-//    Playing,
-//    Pausing,
-//    Paused,
-//    Stoopping
     NoFile,
     Play,
     Stop,
@@ -58,11 +52,6 @@ private:
     std::unique_ptr<TextButton> settingButton;
     AudioDeviceManager deviceManager;
     std::unique_ptr<AoiPlayAudioFile> aoiPlay;
-//    AudioFormatManager formatManager;
-//    std::unique_ptr<AudioFormatReaderSource> readerSource;
-//    std::unique_ptr<AudioFormatReader> formatReader;
-//    AudioTransportSource transportSource;
-//    AudioSourcePlayer sourcePlayer;
     TransportState state;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent);

@@ -91,5 +91,13 @@ void AoiPlayAudioFile::backToStartPoint()
 
 bool AoiPlayAudioFile::isSettingSource()
 {
-//    undefined now...
+    bool hasSource;
+    if(transportSource.getTotalLength() > 0)
+    {
+        hasSource = true;
+    }
+    else{
+        hasSource = false;
+    }
+    return hasSource;
 }

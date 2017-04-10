@@ -47,14 +47,9 @@ state(TransportState::NoFile)
     
     setSize (1080, 720);
     
-//    formatManager.registerBasicFormats();
-//    sourcePlayer.setSource(&transportSource);
-//    deviceManager.addAudioCallback(&sourcePlayer);
     deviceManager.initialise(0, 2, nullptr, true);
     deviceManager.addChangeListener(this);
     aoiPlay = std::make_unique<AoiPlayAudioFile>(deviceManager);
-//    transportSource.addChangeListener(this);
-    
 }
 
 MainContentComponent::~MainContentComponent()
@@ -89,7 +84,6 @@ void MainContentComponent::paint (Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (Colours::black);
-    
     // You can add your drawing code here!
 }
 
@@ -97,7 +91,6 @@ void MainContentComponent::resized()
 {
     const int margin_width = 30;
     const int button_hight = 30;
-
     openButton->setBounds(margin_width, 10, (getWidth() - margin_width * 2) / 2, button_hight);
     settingButton->setBounds(getWidth() / 2, 10, (getWidth() - margin_width * 2) / 2, button_hight);
     playButton->setBounds(margin_width, 50, (getWidth() - margin_width * 2) / 2, button_hight);
@@ -125,24 +118,6 @@ void MainContentComponent::buttonClicked(Button *button)
 //private
 void MainContentComponent::openButtonClicked()
 {
-//    std::cout<<"openButton clicked"<<std::endl;
-//    transportSource.setSource(nullptr);//
-//    FileChooser chooser("Select a audio file to play...", File::nonexistent);
-//    if(chooser.browseForFileToOpen())
-//    {
-//        int maxNumChannles = 2;
-//        File file(chooser.getResult());
-//        readerSource.reset(new AudioFormatReaderSource(formatManager.createReaderFor(file), true));
-//        formatReader.reset(formatManager.createReaderFor(file));
-//        double fileSampleRate = formatReader->sampleRate;
-//        transportSource.setSource(readerSource.get(),
-//                                  0,
-//                                  nullptr,
-//                                  fileSampleRate,
-//                                  maxNumChannles);
-//        playButton->setEnabled(true);
-//        changeTransportState(TransportState::Stopped);
-//    }
     aoiPlay->openDialogAndSetSource();
     changeTransportState(TransportState::Stop);
 }
@@ -176,14 +151,6 @@ void MainContentComponent::playButtonClicked()
 {
     std::cout<<"playButton clicked"<<std::endl;
     changeTransportState(TransportState::Play);
-//    if(state == TransportState::Stop)
-//    {
-//        changeTransportState(TransportState::Play);
-//    }
-//    else if(state == TransportState::Play)
-//    {
-//        changeTransportState(TransportState::Pause);
-//    }
 }
 
 void MainContentComponent::stopButtonClicked()
@@ -208,29 +175,9 @@ void MainContentComponent::changeListenerCallback (ChangeBroadcaster* source)
         
         if(setup.outputChannels.isZero())
         {
-//            sourcePlayer.setSource(nullptr);
             aoiPlay->setSource(nullptr);
         }
     }
-//    else if(source == &transportSource)
-//    {
-//        std::cout<<"AudioTransportSource Listner"<<std::endl;
-//        if(transportSource.isPlaying())
-//        {
-//            changeTransportState(TransportState::Playing);
-//        }
-//        else
-//        {
-//            if(state == TransportState::Stoopping || state == TransportState::Playing)//if(state == TransportState::Stoopping)???
-//            {
-//                changeTransportState(TransportState::Stopped);
-//            }
-//            else if(state == TransportState::Pausing)
-//            {
-//                changeTransportState(TransportState::Paused);
-//            }
-//        }
-//    }
 }
 
 void MainContentComponent::changeTransportState(TransportState newState)
@@ -269,5 +216,4 @@ void MainContentComponent::changeTransportState(TransportState newState)
                 break;
         }
     }
-    
 }
