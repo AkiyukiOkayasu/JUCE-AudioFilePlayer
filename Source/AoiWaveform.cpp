@@ -7,3 +7,14 @@
 //
 
 #include "AoiWaveform.hpp"
+
+AoiWaveform::AoiWaveform()
+{
+    
+}
+
+AoiWaveform::~AoiWaveform()
+{
+    
+}
+//==============================================================================

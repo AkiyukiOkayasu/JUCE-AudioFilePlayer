@@ -9,6 +9,17 @@
 #ifndef AoiWaveform_hpp
 #define AoiWaveform_hpp
 
-#include <stdio.h>
+#include "../JuceLibraryCode/JuceHeader.h"
+
+class AoiWaveform
+{
+public:
+    AoiWaveform();
+    ~AoiWaveform();
+    //==============================================================================
+    
+private:
+    //==============================================================================
+};
 
 #endif /* AoiWaveform_hpp */
