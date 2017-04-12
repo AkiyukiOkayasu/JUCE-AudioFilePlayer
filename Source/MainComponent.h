@@ -52,6 +52,7 @@ private:
     std::unique_ptr<TextButton> settingButton;
     AudioDeviceManager deviceManager;
     std::unique_ptr<AoiPlayAudioFile> aoiPlay;
+    std::unique_ptr<AoiWaveform> waveform;
     TransportState state;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent);

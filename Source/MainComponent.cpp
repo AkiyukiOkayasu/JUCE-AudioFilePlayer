@@ -45,11 +45,15 @@ state(TransportState::NoFile)
     settingButton->setButtonText("Audio Preference");
     settingButton->addListener(this);
     
-    setSize (1080, 720);
-    
     deviceManager.initialise(0, 2, nullptr, true);
     deviceManager.addChangeListener(this);
     aoiPlay = std::make_unique<AoiPlayAudioFile>(deviceManager);
+    waveform = std::make_unique<AoiWaveform>();
+    waveform->init(512);
+    addAndMakeVisible(waveform.get());
+    
+    setSize (1080, 720);
+    setOpaque(false);
 }
 
 MainContentComponent::~MainContentComponent()
@@ -82,9 +86,17 @@ void MainContentComponent::releaseResources()
 //==============================================================================
 void MainContentComponent::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (Colours::black);
+//     (Our component is opaque, so we must completely fill the background with a solid colour)
+//    g.fillAll (Colours::black);
+//    g.fillAll(Colours::antiquewhite);
     // You can add your drawing code here!
+//    g.setColour(Colours::white);
+//    g.fillRect()
+//    Rectangle<int> waveformArea(0, 100, getWidth(), 500);
+//    Rectangle<int> waveformArea(getLocalBounds());
+//    waveform->drawDigest(g, waveformArea);
+    Logger::writeToLog("paint...");
+    waveform->repaint();
 }
 
 void MainContentComponent::resized()
@@ -95,6 +107,7 @@ void MainContentComponent::resized()
     settingButton->setBounds(getWidth() / 2, 10, (getWidth() - margin_width * 2) / 2, button_hight);
     playButton->setBounds(margin_width, 50, (getWidth() - margin_width * 2) / 2, button_hight);
     stopButton->setBounds(getWidth() / 2, 50, (getWidth() - margin_width * 2) / 2, button_hight);
+    waveform->setBounds(0, 100, getWidth(), 300);
 }
 
 void MainContentComponent::buttonClicked(Button *button)
@@ -118,8 +131,19 @@ void MainContentComponent::buttonClicked(Button *button)
 //private
 void MainContentComponent::openButtonClicked()
 {
-    aoiPlay->openDialogAndSetSource();
-    changeTransportState(TransportState::Stop);
+    aoiPlay->setSource(nullptr);
+    FileChooser chooser("Select a audio file to play...",
+                        File::nonexistent,
+                        "*.wav, *.wave, *.aif, *.aiff");
+    if(chooser.browseForFileToOpen())
+    {
+        File file(chooser.getResult());
+        waveform->readFromFile(file);
+        aoiPlay->setSource(&file);
+        changeTransportState(TransportState::Stop);
+    }
+//    aoiPlay->openDialogAndSetSource();
+//    changeTransportState(TransportState::Stop);
 }
 
 void MainContentComponent::settingButtonClicked()

@@ -12,19 +12,24 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 class AoiWaveform:
-private ChangeListener
+public Component,
+public ChangeListener
 {
 public:
-    AoiWaveform();
+    AoiWaveform(/*AudioFormatManager& formatManager_, AudioTransportSource &transportSource_*/);
     ~AoiWaveform();
     //==============================================================================
-    void init(int sourceSamplesPerThumbnailSample, AudioFormatManager& formatManagerToUse);
+    void init(int sourceSamplesPerThumbnailSample);
     void readFromFile(File& file);
+//    void drawDigest(Graphics &g, const Rectangle<int>& area);
+    void paint(Graphics& g) override;
+    void resized() override;
     
     
 private:
     void changeListenerCallback (ChangeBroadcaster* source) override;
     //==============================================================================
+    AudioFormatManager formatmanager;
     AudioThumbnailCache thumbnailCache;
     std::unique_ptr<AudioThumbnail> thumbnail;
 };
