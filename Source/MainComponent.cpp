@@ -49,10 +49,10 @@ state(TransportState::NoFile)
     deviceManager.addChangeListener(this);
     aoiPlay = std::make_unique<AoiPlayAudioFile>(deviceManager);
     waveform = std::make_unique<AoiWaveform>();
-    waveform->init(512);
+    waveform->init(256, true, true);
     addAndMakeVisible(waveform.get());
     
-    setSize (1080, 720);
+    setSize (1280, 720);
     setOpaque(false);
 }
 
@@ -80,34 +80,33 @@ void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& buff
 
 void MainContentComponent::releaseResources()
 {
-
+    
 }
 
 //==============================================================================
 void MainContentComponent::paint (Graphics& g)
 {
-//     (Our component is opaque, so we must completely fill the background with a solid colour)
-//    g.fillAll (Colours::black);
-//    g.fillAll(Colours::antiquewhite);
-    // You can add your drawing code here!
-//    g.setColour(Colours::white);
-//    g.fillRect()
-//    Rectangle<int> waveformArea(0, 100, getWidth(), 500);
-//    Rectangle<int> waveformArea(getLocalBounds());
-//    waveform->drawDigest(g, waveformArea);
-    Logger::writeToLog("paint...");
-    waveform->repaint();
+    
 }
 
 void MainContentComponent::resized()
 {
-    const int margin_width = 30;
-    const int button_hight = 30;
-    openButton->setBounds(margin_width, 10, (getWidth() - margin_width * 2) / 2, button_hight);
-    settingButton->setBounds(getWidth() / 2, 10, (getWidth() - margin_width * 2) / 2, button_hight);
-    playButton->setBounds(margin_width, 50, (getWidth() - margin_width * 2) / 2, button_hight);
-    stopButton->setBounds(getWidth() / 2, 50, (getWidth() - margin_width * 2) / 2, button_hight);
-    waveform->setBounds(0, 100, getWidth(), 300);
+    auto r = getLocalBounds();
+    auto transportBounds = r.removeFromTop(150);
+    int transportButtonWidth = transportBounds.getWidth() / 4;
+    openButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
+    settingButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
+    playButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
+    stopButton->setBounds(transportBounds);
+    waveform->setBounds(r);
+    //settingButton->setBounds(tra)
+    //const int margin_width = 30;
+    //const int button_hight = 30;
+    //openButton->setBounds(margin_width, 10, (getWidth() - margin_width * 2) / 2, button_hight);
+    //settingButton->setBounds(getWidth() / 2, 10, (getWidth() - margin_width * 2) / 2, button_hight);
+    //playButton->setBounds(margin_width, 50, (getWidth() - margin_width * 2) / 2, button_hight);
+    //stopButton->setBounds(getWidth() / 2, 50, (getWidth() - margin_width * 2) / 2, button_hight);
+    //waveform->setBounds(0, 100, getWidth(), 300);
 }
 
 void MainContentComponent::buttonClicked(Button *button)
@@ -142,8 +141,6 @@ void MainContentComponent::openButtonClicked()
         aoiPlay->setSource(&file);
         changeTransportState(TransportState::Stop);
     }
-//    aoiPlay->openDialogAndSetSource();
-//    changeTransportState(TransportState::Stop);
 }
 
 void MainContentComponent::settingButtonClicked()

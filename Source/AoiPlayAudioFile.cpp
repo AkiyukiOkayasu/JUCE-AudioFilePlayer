@@ -78,10 +78,10 @@ void AoiPlayAudioFile::play()
 
 void AoiPlayAudioFile::stop()
 {
- if(transportSource.isPlaying())
- {
-     transportSource.stop();
- }
+    if(transportSource.isPlaying())
+    {
+        transportSource.stop();
+    }
 }
 
 void AoiPlayAudioFile::backToStartPoint()
