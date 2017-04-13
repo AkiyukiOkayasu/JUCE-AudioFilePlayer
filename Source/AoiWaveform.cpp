@@ -47,7 +47,8 @@ void AoiWaveform::paint(Graphics& g)
     if (thumbnail->getTotalLength() > 0.0)
     {
         Rectangle<int> thumbArea (getLocalBounds());
-        g.setColour(Colours::darkgrey);
+        g.setFillType(ColourGradient(Colour::fromRGBA(255, 0, 0, 128), getLocalBounds().getX(), getLocalBounds().getY(), Colour::fromRGBA(0, 0, 255, 128), getLocalBounds().getX(), getLocalBounds().getY(), false));
+//        g.setColour(Colour::fromRGB(86, 211, 255));
         if(enableTransportFollow)
         {
             thumbnail->drawChannels (g, thumbArea.reduced (2),
@@ -61,8 +62,9 @@ void AoiWaveform::paint(Graphics& g)
     }
     else
     {
-        g.setFont (24.0f);
-        g.drawFittedText ("(No audio file selected)", getLocalBounds(), Justification::centred, 2);
+        g.setColour(Colour::fromRGB(255, 255, 255));
+        g.setFont (28.0f);
+        g.drawFittedText ("No audio file selected...", getLocalBounds(), Justification::centred, 2);
     }
 }
 

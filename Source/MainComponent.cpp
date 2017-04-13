@@ -49,6 +49,7 @@ state(TransportState::NoFile)
     
     transportFollowButton = std::make_unique<ToggleButton>("transportFollowToggle");
     addAndMakeVisible(transportFollowButton.get());
+//    transportFollowButton->setColour(<#int colourId#>, <#juce::Colour newColour#>)
     transportFollowButton->setButtonText("Follow transport");
     transportFollowButton->addListener(this);
     
@@ -57,7 +58,6 @@ state(TransportState::NoFile)
     sourcePlayer.setSource(&transportSource);
     deviceManager.addAudioCallback(&sourcePlayer);
     waveform = std::make_unique<AoiWaveform>(transportSource, 512);
-//    waveform->init(256/*, true, true*/);
     addAndMakeVisible(waveform.get());
     
     setSize (1280, 720);
@@ -94,18 +94,20 @@ void MainContentComponent::releaseResources()
 //==============================================================================
 void MainContentComponent::paint (Graphics& g)
 {
+    g.fillAll(Colour::fromRGBA(1, 5, 7, 208));
 }
 
 void MainContentComponent::resized()
 {
     auto r = getLocalBounds();
-    auto transportBounds = r.removeFromTop(50);
+    auto transportBounds = r.removeFromTop(30);
     int transportButtonWidth = transportBounds.getWidth() / 5;
-    openButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
-    settingButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
-    playButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
-    stopButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
-    transportFollowButton->setBounds(transportBounds);
+    int reduceAmount = 3;
+    openButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth).reduced(reduceAmount));
+    settingButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth).reduced(reduceAmount));
+    playButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth).reduced(reduceAmount));
+    stopButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth).reduced(reduceAmount));
+    transportFollowButton->setBounds(transportBounds.reduced(reduceAmount));
     waveform->setBounds(r);
 }
 
