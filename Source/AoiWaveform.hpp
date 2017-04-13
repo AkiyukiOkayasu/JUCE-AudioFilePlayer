@@ -16,7 +16,7 @@ public Component,
 public ChangeListener
 {
 public:
-    AoiWaveform(AudioFormatManager& formatManager_, AudioTransportSource& transportSource_);
+    AoiWaveform(AudioTransportSource& transportSource_);
     ~AoiWaveform();
     //==============================================================================
     void init(int sourceSamplesPerThumbnailSample);
@@ -28,13 +28,11 @@ public:
 private:
     void changeListenerCallback (ChangeBroadcaster* source) override;
     //==============================================================================
-    AudioFormatManager& formatManager;
+    AudioFormatManager formatManager;
     AudioTransportSource& transportSource;
     AudioThumbnailCache thumbnailCache;
     std::unique_ptr<AudioThumbnail> thumbnail;
     int sourceSamplesPerThumbnailSample;
-//    bool showDigestWaveform;
-//    bool showZoomableWaveform;
     bool enableTransportFollow = false;
 };
 

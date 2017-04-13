@@ -10,7 +10,6 @@
 #define MainComponent_h
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "AoiPlayAudioFile.hpp"
 #include "AoiWaveform.hpp"
 
 enum class TransportState : int{
@@ -44,16 +43,20 @@ private:
     void stopButtonClicked();
     void changeListenerCallback (ChangeBroadcaster* source) override;
     void changeTransportState(TransportState newState);
+    void setAudioFile(File* file);
     //==============================================================================
     // Your private member variables go here...
+    
     std::unique_ptr<TextButton> openButton;
     std::unique_ptr<TextButton> playButton;
     std::unique_ptr<TextButton> stopButton;
     std::unique_ptr<TextButton> settingButton;
+    std::unique_ptr<AudioFormatReaderSource> readerSource;
+    std::unique_ptr<AudioFormatReader> formatReader;
     AudioFormatManager formatManager;
+    AudioSourcePlayer sourcePlayer;
     AudioTransportSource transportSource;
     AudioDeviceManager deviceManager;
-    std::unique_ptr<AoiPlayAudioFile> aoiPlay;
     std::unique_ptr<AoiWaveform> waveform;
     TransportState state;
     //==============================================================================

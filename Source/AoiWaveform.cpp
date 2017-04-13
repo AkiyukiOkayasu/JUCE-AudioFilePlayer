@@ -8,13 +8,13 @@
 
 #include "AoiWaveform.hpp"
 
-AoiWaveform::AoiWaveform(AudioFormatManager& formatManager_, AudioTransportSource& transportSource_)
+AoiWaveform::AoiWaveform(AudioTransportSource& transportSource_)
 :
-formatManager(formatManager_),
 transportSource(transportSource_),
 thumbnailCache(2)
 {
-    //formatmanager.registerBasicFormats();
+    formatManager.registerBasicFormats();
+//    thumbnail->addChangeListener(this);
 }
 
 AoiWaveform::~AoiWaveform()
@@ -24,8 +24,6 @@ AoiWaveform::~AoiWaveform()
 //==============================================================================
 void AoiWaveform::init(int sourceSamplesPerThumbnailSample)
 {
-//    showDigestWaveform = showDigestWaveform_;
-//    showZoomableWaveform = showZoomableWaveform_;
     thumbnail = std::make_unique<AudioThumbnail>(sourceSamplesPerThumbnailSample, formatManager, thumbnailCache);
     thumbnail->addChangeListener(this);
 }
@@ -33,6 +31,7 @@ void AoiWaveform::init(int sourceSamplesPerThumbnailSample)
 void AoiWaveform::readFromFile(File& file)
 {
     thumbnail->setSource(new FileInputSource(file));
+    //repaint();
 }
 
 void AoiWaveform::paint(Graphics& g)
@@ -46,7 +45,7 @@ void AoiWaveform::paint(Graphics& g)
     }
     else
     {
-        g.setFont (14.0f);
+        g.setFont (24.0f);
         g.drawFittedText ("(No audio file selected)", getLocalBounds(), Justification::centred, 2);
     }
 }

@@ -49,8 +49,9 @@ state(TransportState::NoFile)
     
     deviceManager.initialise(0, 2, nullptr, true);
     deviceManager.addChangeListener(this);
-    aoiPlay = std::make_unique<AoiPlayAudioFile>(deviceManager, formatManager, transportSource);
-    waveform = std::make_unique<AoiWaveform>(formatManager, transportSource);
+    sourcePlayer.setSource(&transportSource);
+    deviceManager.addAudioCallback(&sourcePlayer);
+    waveform = std::make_unique<AoiWaveform>(transportSource);
     waveform->init(256/*, true, true*/);
     addAndMakeVisible(waveform.get());
     
@@ -60,7 +61,7 @@ state(TransportState::NoFile)
 
 MainContentComponent::~MainContentComponent()
 {
-    
+    deviceManager.removeChangeListener(this);
 }
 
 //==============================================================================
@@ -94,7 +95,7 @@ void MainContentComponent::paint (Graphics& g)
 void MainContentComponent::resized()
 {
     auto r = getLocalBounds();
-    auto transportBounds = r.removeFromTop(150);
+    auto transportBounds = r.removeFromTop(50);
     int transportButtonWidth = transportBounds.getWidth() / 4;
     openButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
     settingButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
@@ -124,7 +125,6 @@ void MainContentComponent::buttonClicked(Button *button)
 //private
 void MainContentComponent::openButtonClicked()
 {
-    aoiPlay->setSource(nullptr);
     FileChooser chooser("Select a audio file to play...",
                         File::nonexistent,
                         "*.wav, *.wave, *.aif, *.aiff");
@@ -132,7 +132,7 @@ void MainContentComponent::openButtonClicked()
     {
         File file(chooser.getResult());
         waveform->readFromFile(file);
-        aoiPlay->setSource(&file);
+        setAudioFile(&file);
         changeTransportState(TransportState::Stop);
     }
 }
@@ -165,6 +165,7 @@ void MainContentComponent::settingButtonClicked()
 void MainContentComponent::playButtonClicked()
 {
     std::cout<<"playButton clicked"<<std::endl;
+    transportSource.start();
     changeTransportState(TransportState::Play);
 }
 
@@ -173,10 +174,12 @@ void MainContentComponent::stopButtonClicked()
     std::cout<<"stopButton clicked"<<std::endl;
     if(state == TransportState::Pause)
     {
+        transportSource.setPosition(0.0);
         changeTransportState(TransportState::Stop);
     }
     else
     {
+        transportSource.stop();
         changeTransportState(TransportState::Pause);
     }
 }
@@ -190,7 +193,7 @@ void MainContentComponent::changeListenerCallback (ChangeBroadcaster* source)
         
         if(setup.outputChannels.isZero())
         {
-            aoiPlay->setSource(nullptr);
+            setAudioFile(nullptr);
         }
     }
 }
@@ -211,7 +214,6 @@ void MainContentComponent::changeTransportState(TransportState newState)
                 playButton->setEnabled(false);
                 stopButton->setButtonText("Pause");
                 stopButton->setEnabled(true);
-                aoiPlay->play();
                 break;
             case TransportState::Stop:
                 std::cout<<"Stop"<<std::endl;
@@ -219,7 +221,6 @@ void MainContentComponent::changeTransportState(TransportState newState)
                 playButton->setEnabled(true);
                 stopButton->setButtonText("Stop");
                 stopButton->setEnabled(false);
-                aoiPlay->backToStartPoint();
                 break;
             case TransportState::Pause:
                 std::cout<<"Pause"<<std::endl;
@@ -227,8 +228,33 @@ void MainContentComponent::changeTransportState(TransportState newState)
                 playButton->setEnabled(true);
                 stopButton->setButtonText("Back to head");
                 stopButton->setEnabled(true);
-                aoiPlay->stop();
                 break;
         }
+    }
+}
+
+void MainContentComponent::setAudioFile(File* file)
+{
+    if(file == nullptr)
+    {
+        if(transportSource.isPlaying())
+        {
+            transportSource.stop();
+        }
+        
+        transportSource.setSource(nullptr);
+        sourcePlayer.setSource(nullptr);
+    }
+    else
+    {
+        transportSource.setSource(nullptr);
+        readerSource.reset(new AudioFormatReaderSource(formatManager.createReaderFor(*file), true));
+        formatReader.reset(formatManager.createReaderFor(*file));
+        transportSource.setSource(readerSource.get(),
+                                  0,
+                                  nullptr,
+                                  formatReader->sampleRate,
+                                  formatReader->numChannels);
+        sourcePlayer.setSource(&transportSource);
     }
 }
