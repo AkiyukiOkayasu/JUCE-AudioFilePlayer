@@ -8,11 +8,13 @@
 
 #include "AoiWaveform.hpp"
 
-AoiWaveform::AoiWaveform()
+AoiWaveform::AoiWaveform(AudioFormatManager& formatManager_, AudioTransportSource& transportSource_)
 :
+formatManager(formatManager_),
+transportSource(transportSource_),
 thumbnailCache(2)
 {
-    formatmanager.registerBasicFormats();
+    //formatmanager.registerBasicFormats();
 }
 
 AoiWaveform::~AoiWaveform()
@@ -20,11 +22,11 @@ AoiWaveform::~AoiWaveform()
     thumbnail->removeChangeListener(this);
 }
 //==============================================================================
-void AoiWaveform::init(int sourceSamplesPerThumbnailSample, bool showDigestWaveform_, bool showZoomableWaveform_)
+void AoiWaveform::init(int sourceSamplesPerThumbnailSample)
 {
-    showDigestWaveform = showDigestWaveform_;
-    showZoomableWaveform = showZoomableWaveform_;
-    thumbnail = std::make_unique<AudioThumbnail>(sourceSamplesPerThumbnailSample, formatmanager, thumbnailCache);
+//    showDigestWaveform = showDigestWaveform_;
+//    showZoomableWaveform = showZoomableWaveform_;
+    thumbnail = std::make_unique<AudioThumbnail>(sourceSamplesPerThumbnailSample, formatManager, thumbnailCache);
     thumbnail->addChangeListener(this);
 }
 
@@ -52,6 +54,11 @@ void AoiWaveform::paint(Graphics& g)
 void AoiWaveform::resized()
 {
     
+}
+
+void AoiWaveform::setTransportFollowing(bool transportFollowing)
+{
+    enableTransportFollow = transportFollowing;
 }
 
 //==============================================================================

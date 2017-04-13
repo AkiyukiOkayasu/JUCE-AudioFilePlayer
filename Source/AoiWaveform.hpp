@@ -16,23 +16,26 @@ public Component,
 public ChangeListener
 {
 public:
-    AoiWaveform();
+    AoiWaveform(AudioFormatManager& formatManager_, AudioTransportSource& transportSource_);
     ~AoiWaveform();
     //==============================================================================
-    void init(int sourceSamplesPerThumbnailSample, bool showDigestWaveform_, bool showZoomableWaveform_);
+    void init(int sourceSamplesPerThumbnailSample);
     void readFromFile(File& file);
     void paint(Graphics& g) override;
     void resized() override;
+    void setTransportFollowing(bool transportFollowing);
     
 private:
     void changeListenerCallback (ChangeBroadcaster* source) override;
     //==============================================================================
-    AudioFormatManager formatmanager;
+    AudioFormatManager& formatManager;
+    AudioTransportSource& transportSource;
     AudioThumbnailCache thumbnailCache;
     std::unique_ptr<AudioThumbnail> thumbnail;
     int sourceSamplesPerThumbnailSample;
-    bool showDigestWaveform;
-    bool showZoomableWaveform;
+//    bool showDigestWaveform;
+//    bool showZoomableWaveform;
+    bool enableTransportFollow = false;
 };
 
 #endif /* AoiWaveform_hpp */

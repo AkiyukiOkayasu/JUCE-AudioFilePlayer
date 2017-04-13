@@ -50,6 +50,8 @@ private:
     std::unique_ptr<TextButton> playButton;
     std::unique_ptr<TextButton> stopButton;
     std::unique_ptr<TextButton> settingButton;
+    AudioFormatManager formatManager;
+    AudioTransportSource transportSource;
     AudioDeviceManager deviceManager;
     std::unique_ptr<AoiPlayAudioFile> aoiPlay;
     std::unique_ptr<AoiWaveform> waveform;

@@ -14,7 +14,7 @@
 class AoiPlayAudioFile
 {
 public:
-    AoiPlayAudioFile(AudioDeviceManager& deviceManager);
+    AoiPlayAudioFile(AudioDeviceManager& deviceManager, AudioFormatManager& formatManager_, AudioTransportSource& transportSource_);
     ~AoiPlayAudioFile();
     //==============================================================================
     void openDialogAndSetSource();
@@ -27,10 +27,10 @@ public:
 private:
     //==============================================================================
     //private menber
-    AudioFormatManager formatManager;
+    AudioFormatManager& formatManager;
     std::unique_ptr<AudioFormatReaderSource> readerSource;
     std::unique_ptr<AudioFormatReader> formatReader;
-    AudioTransportSource transportSource;
+    AudioTransportSource& transportSource;
     AudioSourcePlayer sourcePlayer;
 };
 

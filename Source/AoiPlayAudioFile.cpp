@@ -8,9 +8,11 @@
 
 #include "AoiPlayAudioFile.hpp"
 
-AoiPlayAudioFile::AoiPlayAudioFile(AudioDeviceManager& deviceManager)
+AoiPlayAudioFile::AoiPlayAudioFile(AudioDeviceManager& deviceManager, AudioFormatManager& formatManager_, AudioTransportSource& transportSource_)
+:
+formatManager(formatManager_),
+transportSource(transportSource_)
 {
-    formatManager.registerBasicFormats();
     sourcePlayer.setSource(&transportSource);
     deviceManager.addAudioCallback(&sourcePlayer);
 }
