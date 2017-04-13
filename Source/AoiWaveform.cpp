@@ -8,29 +8,37 @@
 
 #include "AoiWaveform.hpp"
 
-AoiWaveform::AoiWaveform(AudioTransportSource& transportSource_)
+AoiWaveform::AoiWaveform(AudioTransportSource& transportSource_, int sourceSamplesPerThumbnailSample_)
 :
 transportSource(transportSource_),
-thumbnailCache(2)
+thumbnailCache(2),
+sourceSamplesPerThumbnailSample(sourceSamplesPerThumbnailSample_)
 {
     formatManager.registerBasicFormats();
-//    thumbnail->addChangeListener(this);
+    transportPosition.setStart(0.0);
+    thumbnail = std::make_unique<AudioThumbnail>(sourceSamplesPerThumbnailSample, formatManager, thumbnailCache);
+    thumbnail->addChangeListener(this);
+    startTimerHz(60);
 }
 
 AoiWaveform::~AoiWaveform()
 {
-    thumbnail->removeChangeListener(this);
+//    thumbnail->removeChangeListener(this);
 }
 //==============================================================================
-void AoiWaveform::init(int sourceSamplesPerThumbnailSample)
-{
-    thumbnail = std::make_unique<AudioThumbnail>(sourceSamplesPerThumbnailSample, formatManager, thumbnailCache);
-    thumbnail->addChangeListener(this);
-}
+//void AoiWaveform::init(int sourceSamplesPerThumbnailSample)
+//{
+//    thumbnail = std::make_unique<AudioThumbnail>(sourceSamplesPerThumbnailSample, formatManager, thumbnailCache);
+//    thumbnail->addChangeListener(this);
+//}
 
 void AoiWaveform::readFromFile(File& file)
 {
     thumbnail->setSource(new FileInputSource(file));
+    formatReader.reset(formatManager.createReaderFor(file));
+    transportPosition = Range<double>(0.0, thumbnail->getTotalLength());
+//    transportPosition.setStart(0.0);
+//    transportPosition.setLength(formatReader->lengthInSamples);
     //repaint();
 }
 
@@ -39,9 +47,17 @@ void AoiWaveform::paint(Graphics& g)
     if (thumbnail->getTotalLength() > 0.0)
     {
         Rectangle<int> thumbArea (getLocalBounds());
-        g.setColour(Colours::red);
-        thumbnail->drawChannels (g, thumbArea.reduced (2),
-                                 0.0, thumbnail->getTotalLength(), 1.0f);
+        g.setColour(Colours::darkgrey);
+        if(enableTransportFollow)
+        {
+            thumbnail->drawChannels (g, thumbArea.reduced (2),
+                                     transportPosition.getStart(), transportPosition.getEnd(), 1.0f);
+        }
+        else
+        {
+            thumbnail->drawChannels (g, thumbArea.reduced (2),
+                                     0.0, thumbnail->getTotalLength(), 1.0f);
+        }
     }
     else
     {
@@ -70,4 +86,17 @@ void AoiWaveform::changeListenerCallback (ChangeBroadcaster* source)
             repaint();
         }
     }
+}
+
+void AoiWaveform::timerCallback()
+{
+//    transportPosition.withStartAndLength(transportSource.getCurrentPosition(), 2.0);
+//    std::cout<<"transportPosition: "<<transportPosition.getStart()<<"/"<<transportPosition.getEnd()<<std::endl;
+//    std::cout<<"CurrentSourcePosition: "<<transportSource.getCurrentPosition()<<std::endl;
+    double currentTime = transportSource.getCurrentPosition();
+    transportPosition.setStart(currentTime);
+    transportPosition.setEnd(currentTime + 5.0);
+//    transportPosition.setEnd(formatReader->lengthInSamples);
+//    transportPosition.setEnd()
+    repaint();
 }

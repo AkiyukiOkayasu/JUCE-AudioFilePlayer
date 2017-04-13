@@ -47,12 +47,17 @@ state(TransportState::NoFile)
     settingButton->setButtonText("Audio Preference");
     settingButton->addListener(this);
     
+    transportFollowButton = std::make_unique<ToggleButton>("transportFollowToggle");
+    addAndMakeVisible(transportFollowButton.get());
+    transportFollowButton->setButtonText("Follow transport");
+    transportFollowButton->addListener(this);
+    
     deviceManager.initialise(0, 2, nullptr, true);
     deviceManager.addChangeListener(this);
     sourcePlayer.setSource(&transportSource);
     deviceManager.addAudioCallback(&sourcePlayer);
-    waveform = std::make_unique<AoiWaveform>(transportSource);
-    waveform->init(256/*, true, true*/);
+    waveform = std::make_unique<AoiWaveform>(transportSource, 512);
+//    waveform->init(256/*, true, true*/);
     addAndMakeVisible(waveform.get());
     
     setSize (1280, 720);
@@ -89,18 +94,18 @@ void MainContentComponent::releaseResources()
 //==============================================================================
 void MainContentComponent::paint (Graphics& g)
 {
-    
 }
 
 void MainContentComponent::resized()
 {
     auto r = getLocalBounds();
     auto transportBounds = r.removeFromTop(50);
-    int transportButtonWidth = transportBounds.getWidth() / 4;
+    int transportButtonWidth = transportBounds.getWidth() / 5;
     openButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
     settingButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
     playButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
-    stopButton->setBounds(transportBounds);
+    stopButton->setBounds(transportBounds.removeFromLeft(transportButtonWidth));
+    transportFollowButton->setBounds(transportBounds);
     waveform->setBounds(r);
 }
 
@@ -109,15 +114,22 @@ void MainContentComponent::buttonClicked(Button *button)
     if(button == openButton.get())
     {
         openButtonClicked();
-    }else if(button == settingButton.get())
+    }
+    else if(button == settingButton.get())
     {
         settingButtonClicked();
-    }else if(button == playButton.get())
+    }
+    else if(button == playButton.get())
     {
         playButtonClicked();
-    }else if(button == stopButton.get())
+    }
+    else if(button == stopButton.get())
     {
         stopButtonClicked();
+    }
+    else if(button == transportFollowButton.get())
+    {
+        waveform->setTransportFollowing(transportFollowButton->getToggleState());
     }
 }
 

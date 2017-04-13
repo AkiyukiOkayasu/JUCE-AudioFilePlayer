@@ -13,13 +13,14 @@
 
 class AoiWaveform:
 public Component,
-public ChangeListener
+public ChangeListener,
+public Timer
 {
 public:
-    AoiWaveform(AudioTransportSource& transportSource_);
+    AoiWaveform(AudioTransportSource& transportSource_, int sourceSamplesPerThumbnailSample_);
     ~AoiWaveform();
     //==============================================================================
-    void init(int sourceSamplesPerThumbnailSample);
+//    void init(int sourceSamplesPerThumbnailSample);
     void readFromFile(File& file);
     void paint(Graphics& g) override;
     void resized() override;
@@ -27,11 +28,14 @@ public:
     
 private:
     void changeListenerCallback (ChangeBroadcaster* source) override;
+    void timerCallback() override;
     //==============================================================================
     AudioFormatManager formatManager;
     AudioTransportSource& transportSource;
     AudioThumbnailCache thumbnailCache;
+    Range<double> transportPosition;
     std::unique_ptr<AudioThumbnail> thumbnail;
+    std::unique_ptr<AudioFormatReader> formatReader;
     int sourceSamplesPerThumbnailSample;
     bool enableTransportFollow = false;
 };

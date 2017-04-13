@@ -51,6 +51,7 @@ private:
     std::unique_ptr<TextButton> playButton;
     std::unique_ptr<TextButton> stopButton;
     std::unique_ptr<TextButton> settingButton;
+    std::unique_ptr<ToggleButton> transportFollowButton;
     std::unique_ptr<AudioFormatReaderSource> readerSource;
     std::unique_ptr<AudioFormatReader> formatReader;
     AudioFormatManager formatManager;
