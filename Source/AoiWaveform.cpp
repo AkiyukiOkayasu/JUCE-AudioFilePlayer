@@ -23,7 +23,7 @@ sourceSamplesPerThumbnailSample(sourceSamplesPerThumbnailSample_)
 
 AoiWaveform::~AoiWaveform()
 {
-//    thumbnail->removeChangeListener(this);
+    //    thumbnail->removeChangeListener(this);
 }
 //==============================================================================
 //void AoiWaveform::init(int sourceSamplesPerThumbnailSample)
@@ -37,8 +37,8 @@ void AoiWaveform::readFromFile(File& file)
     thumbnail->setSource(new FileInputSource(file));
     formatReader.reset(formatManager.createReaderFor(file));
     transportPosition = Range<double>(0.0, thumbnail->getTotalLength());
-//    transportPosition.setStart(0.0);
-//    transportPosition.setLength(formatReader->lengthInSamples);
+    //    transportPosition.setStart(0.0);
+    //    transportPosition.setLength(formatReader->lengthInSamples);
     //repaint();
 }
 
@@ -47,8 +47,7 @@ void AoiWaveform::paint(Graphics& g)
     if (thumbnail->getTotalLength() > 0.0)
     {
         Rectangle<int> thumbArea (getLocalBounds());
-        g.setFillType(ColourGradient(Colour::fromRGBA(255, 0, 0, 128), getLocalBounds().getX(), getLocalBounds().getY(), Colour::fromRGBA(0, 0, 255, 128), getLocalBounds().getX(), getLocalBounds().getY(), false));
-//        g.setColour(Colour::fromRGB(86, 211, 255));
+        g.setGradientFill(ColourGradient(Colour::fromRGBA(245, 0, 89, 216), thumbArea.getX(), thumbArea.getHeight() / 2, Colour::fromRGBA(25, 0, 170, 101), thumbArea.getWidth(), thumbArea.getHeight() / 2, false));
         if(enableTransportFollow)
         {
             thumbnail->drawChannels (g, thumbArea.reduced (2),
@@ -62,7 +61,7 @@ void AoiWaveform::paint(Graphics& g)
     }
     else
     {
-        g.setColour(Colour::fromRGB(255, 255, 255));
+        g.setColour(Colours::black);
         g.setFont (28.0f);
         g.drawFittedText ("No audio file selected...", getLocalBounds(), Justification::centred, 2);
     }
@@ -92,13 +91,13 @@ void AoiWaveform::changeListenerCallback (ChangeBroadcaster* source)
 
 void AoiWaveform::timerCallback()
 {
-//    transportPosition.withStartAndLength(transportSource.getCurrentPosition(), 2.0);
-//    std::cout<<"transportPosition: "<<transportPosition.getStart()<<"/"<<transportPosition.getEnd()<<std::endl;
-//    std::cout<<"CurrentSourcePosition: "<<transportSource.getCurrentPosition()<<std::endl;
+    //    transportPosition.withStartAndLength(transportSource.getCurrentPosition(), 2.0);
+    //    std::cout<<"transportPosition: "<<transportPosition.getStart()<<"/"<<transportPosition.getEnd()<<std::endl;
+    //    std::cout<<"CurrentSourcePosition: "<<transportSource.getCurrentPosition()<<std::endl;
     double currentTime = transportSource.getCurrentPosition();
     transportPosition.setStart(currentTime);
-    transportPosition.setEnd(currentTime + 5.0);
-//    transportPosition.setEnd(formatReader->lengthInSamples);
-//    transportPosition.setEnd()
+    transportPosition.setEnd(currentTime + 4.0);
+    //    transportPosition.setEnd(formatReader->lengthInSamples);
+    //    transportPosition.setEnd()
     repaint();
 }

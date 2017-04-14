@@ -59,6 +59,7 @@ state(TransportState::NoFile)
     deviceManager.addAudioCallback(&sourcePlayer);
     waveform = std::make_unique<AoiWaveform>(transportSource, 512);
     addAndMakeVisible(waveform.get());
+    transportSource.addChangeListener(this);
     
     setSize (1280, 720);
     setOpaque(false);
@@ -94,7 +95,7 @@ void MainContentComponent::releaseResources()
 //==============================================================================
 void MainContentComponent::paint (Graphics& g)
 {
-    g.fillAll(Colour::fromRGBA(1, 5, 7, 208));
+    g.fillAll(Colours::transparentWhite);
 }
 
 void MainContentComponent::resized()
@@ -210,6 +211,17 @@ void MainContentComponent::changeListenerCallback (ChangeBroadcaster* source)
             setAudioFile(nullptr);
         }
     }
+//    else if(source == &transportSource)
+//    {
+//        switch (state) {
+//            case TransportState::Stop :
+//                <#statements#>
+//                break;
+//                
+//            default:
+//                break;
+//        }
+//    }
 }
 
 void MainContentComponent::changeTransportState(TransportState newState)
