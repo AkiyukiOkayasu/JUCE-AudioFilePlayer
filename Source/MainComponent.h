@@ -46,7 +46,6 @@ private:
     void setAudioFile(File* file);
     //==============================================================================
     // Your private member variables go here...
-    
     std::unique_ptr<TextButton> openButton;
     std::unique_ptr<TextButton> playButton;
     std::unique_ptr<TextButton> stopButton;

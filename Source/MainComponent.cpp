@@ -49,7 +49,6 @@ state(TransportState::NoFile)
     
     transportFollowButton = std::make_unique<ToggleButton>("transportFollowToggle");
     addAndMakeVisible(transportFollowButton.get());
-//    transportFollowButton->setColour(<#int colourId#>, <#juce::Colour newColour#>)
     transportFollowButton->setButtonText("Follow transport");
     transportFollowButton->addListener(this);
     
@@ -211,17 +210,17 @@ void MainContentComponent::changeListenerCallback (ChangeBroadcaster* source)
             setAudioFile(nullptr);
         }
     }
-//    else if(source == &transportSource)
-//    {
-//        switch (state) {
-//            case TransportState::Stop :
-//                <#statements#>
-//                break;
-//                
-//            default:
-//                break;
-//        }
-//    }
+    //    else if(source == &transportSource)
+    //    {
+    //        switch (state) {
+    //            case TransportState::Stop :
+    //                <#statements#>
+    //                break;
+    //
+    //            default:
+    //                break;
+    //        }
+    //    }
 }
 
 void MainContentComponent::changeTransportState(TransportState newState)

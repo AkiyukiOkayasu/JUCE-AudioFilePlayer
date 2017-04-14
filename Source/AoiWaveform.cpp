@@ -23,23 +23,13 @@ sourceSamplesPerThumbnailSample(sourceSamplesPerThumbnailSample_)
 
 AoiWaveform::~AoiWaveform()
 {
-    //    thumbnail->removeChangeListener(this);
 }
 //==============================================================================
-//void AoiWaveform::init(int sourceSamplesPerThumbnailSample)
-//{
-//    thumbnail = std::make_unique<AudioThumbnail>(sourceSamplesPerThumbnailSample, formatManager, thumbnailCache);
-//    thumbnail->addChangeListener(this);
-//}
-
 void AoiWaveform::readFromFile(File& file)
 {
     thumbnail->setSource(new FileInputSource(file));
     formatReader.reset(formatManager.createReaderFor(file));
     transportPosition = Range<double>(0.0, thumbnail->getTotalLength());
-    //    transportPosition.setStart(0.0);
-    //    transportPosition.setLength(formatReader->lengthInSamples);
-    //repaint();
 }
 
 void AoiWaveform::paint(Graphics& g)
@@ -91,13 +81,8 @@ void AoiWaveform::changeListenerCallback (ChangeBroadcaster* source)
 
 void AoiWaveform::timerCallback()
 {
-    //    transportPosition.withStartAndLength(transportSource.getCurrentPosition(), 2.0);
-    //    std::cout<<"transportPosition: "<<transportPosition.getStart()<<"/"<<transportPosition.getEnd()<<std::endl;
-    //    std::cout<<"CurrentSourcePosition: "<<transportSource.getCurrentPosition()<<std::endl;
     double currentTime = transportSource.getCurrentPosition();
     transportPosition.setStart(currentTime);
     transportPosition.setEnd(currentTime + 4.0);
-    //    transportPosition.setEnd(formatReader->lengthInSamples);
-    //    transportPosition.setEnd()
     repaint();
 }

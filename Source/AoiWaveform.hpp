@@ -20,7 +20,6 @@ public:
     AoiWaveform(AudioTransportSource& transportSource_, int sourceSamplesPerThumbnailSample_);
     ~AoiWaveform();
     //==============================================================================
-//    void init(int sourceSamplesPerThumbnailSample);
     void readFromFile(File& file);
     void paint(Graphics& g) override;
     void resized() override;
