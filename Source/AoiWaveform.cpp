@@ -38,7 +38,7 @@ void AoiWaveform::paint(Graphics& g)
     {
         Rectangle<int> thumbArea (getLocalBounds());
         g.setGradientFill(ColourGradient(Colour::fromRGBA(245, 0, 89, 216), thumbArea.getX(), thumbArea.getHeight() / 2, Colour::fromRGBA(25, 0, 170, 101), thumbArea.getWidth(), thumbArea.getHeight() / 2, false));
-        if(transportSource.isPlaying())
+        if(transportPosition.getStart() < transportSource.getLengthInSeconds())
         {
             if(enableTransportFollow)
             {
@@ -90,6 +90,7 @@ void AoiWaveform::changeListenerCallback (ChangeBroadcaster* source)
 void AoiWaveform::timerCallback()
 {
     double currentTime = transportSource.getCurrentPosition();
+    std::cout<<"currentTime: "<<currentTime<<std::endl;
     transportPosition.setStart(currentTime);
     transportPosition.setEnd(currentTime + 4.0);
     repaint();

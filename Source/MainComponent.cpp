@@ -210,17 +210,6 @@ void MainContentComponent::changeListenerCallback (ChangeBroadcaster* source)
             setAudioFile(nullptr);
         }
     }
-    //    else if(source == &transportSource)
-    //    {
-    //        switch (state) {
-    //            case TransportState::Stop :
-    //                <#statements#>
-    //                break;
-    //
-    //            default:
-    //                break;
-    //        }
-    //    }
 }
 
 void MainContentComponent::changeTransportState(TransportState newState)
