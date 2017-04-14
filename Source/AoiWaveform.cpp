@@ -38,10 +38,18 @@ void AoiWaveform::paint(Graphics& g)
     {
         Rectangle<int> thumbArea (getLocalBounds());
         g.setGradientFill(ColourGradient(Colour::fromRGBA(245, 0, 89, 216), thumbArea.getX(), thumbArea.getHeight() / 2, Colour::fromRGBA(25, 0, 170, 101), thumbArea.getWidth(), thumbArea.getHeight() / 2, false));
-        if(enableTransportFollow)
+        if(transportSource.isPlaying())
         {
-            thumbnail->drawChannels (g, thumbArea.reduced (2),
-                                     transportPosition.getStart(), transportPosition.getEnd(), 1.0f);
+            if(enableTransportFollow)
+            {
+                thumbnail->drawChannels (g, thumbArea.reduced (2),
+                                         transportPosition.getStart(), transportPosition.getEnd(), 1.0f);
+            }
+            else
+            {
+                thumbnail->drawChannels (g, thumbArea.reduced (2),
+                                         0.0, thumbnail->getTotalLength(), 1.0f);
+            }
         }
         else
         {
