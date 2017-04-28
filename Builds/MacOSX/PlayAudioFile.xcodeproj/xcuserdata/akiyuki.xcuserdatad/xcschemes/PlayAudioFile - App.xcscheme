@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0820"
+   LastUpgradeVersion = "0830"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "75CCFF4A83F0C4D911A19E47"
                BuildableName = "PlayAudioFile.app"
-               BlueprintName = "PlayAudioFile (App)"
+               BlueprintName = "PlayAudioFile - App"
                ReferencedContainer = "container:PlayAudioFile.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,7 +34,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "75CCFF4A83F0C4D911A19E47"
             BuildableName = "PlayAudioFile.app"
-            BlueprintName = "PlayAudioFile (App)"
+            BlueprintName = "PlayAudioFile - App"
             ReferencedContainer = "container:PlayAudioFile.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -57,7 +57,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "75CCFF4A83F0C4D911A19E47"
             BuildableName = "PlayAudioFile.app"
-            BlueprintName = "PlayAudioFile (App)"
+            BlueprintName = "PlayAudioFile - App"
             ReferencedContainer = "container:PlayAudioFile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -76,7 +76,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "75CCFF4A83F0C4D911A19E47"
             BuildableName = "PlayAudioFile.app"
-            BlueprintName = "PlayAudioFile (App)"
+            BlueprintName = "PlayAudioFile - App"
             ReferencedContainer = "container:PlayAudioFile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
