@@ -57,7 +57,7 @@ private:
     AudioSourcePlayer sourcePlayer;
     AudioTransportSource transportSource;
     AudioDeviceManager deviceManager;
-    std::unique_ptr<AoiWaveform> waveform;
+    std::unique_ptr<AoiWaveform> waveform;//波形表示の自作クラス
     TransportState state;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent);

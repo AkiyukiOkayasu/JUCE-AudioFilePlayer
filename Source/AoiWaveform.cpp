@@ -37,22 +37,28 @@ void AoiWaveform::paint(Graphics& g)
     if (thumbnail->getTotalLength() > 0.0)
     {
         Rectangle<int> thumbArea (getLocalBounds());
+        
+        //色:グラデーション
         g.setGradientFill(ColourGradient(Colour::fromRGBA(245, 0, 89, 216), thumbArea.getX(), thumbArea.getHeight() / 2, Colour::fromRGBA(25, 0, 170, 101), thumbArea.getWidth(), thumbArea.getHeight() / 2, false));
+        
         if(transportPosition.getStart() < transportSource.getLengthInSeconds())
         {
             if(enableTransportFollow)
             {
+                //波形:現在の再生位置付近を表示
                 thumbnail->drawChannels (g, thumbArea.reduced (2),
                                          transportPosition.getStart(), transportPosition.getEnd(), 1.0f);
             }
             else
             {
+                //波形:全体表示
                 thumbnail->drawChannels (g, thumbArea.reduced (2),
                                          0.0, thumbnail->getTotalLength(), 1.0f);
             }
         }
         else
         {
+            //波形:再生終了時は全体表示に切り替える
             thumbnail->drawChannels (g, thumbArea.reduced (2),
                                      0.0, thumbnail->getTotalLength(), 1.0f);
         }
@@ -81,16 +87,13 @@ void AoiWaveform::changeListenerCallback (ChangeBroadcaster* source)
     if(source == thumbnail.get())
     {
         if(thumbnail->getTotalLength() > 0.0)
-        {
             repaint();
-        }
     }
 }
 
 void AoiWaveform::timerCallback()
 {
     double currentTime = transportSource.getCurrentPosition();
-    std::cout<<"currentTime: "<<currentTime<<std::endl;
     transportPosition.setStart(currentTime);
     transportPosition.setEnd(currentTime + 4.0);
     repaint();

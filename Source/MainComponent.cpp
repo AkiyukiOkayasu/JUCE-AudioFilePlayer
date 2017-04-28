@@ -10,19 +10,11 @@
 
 MainContentComponent::MainContentComponent()
 :
-//C++11 style : Making smart pointer
-//    openButton(new TextButton("openButton")),
-//    playButton(new TextButton("playButton")),
-//    stopButton(new TextButton("stopButton")),
-//    settingButton(new TextButton("settingButton")),
 state(TransportState::NoFile)
 {
     formatManager.registerBasicFormats();
     
-    //C++14 style? : Making smart pointer -> Does not working...
-    //openButton = addAndMakeVisible(std::make_unique<TextButton>());
-    
-    //Another C++14 style : Making smart pointer and addAndMakeVisible().
+    //C++14 style : Making smart pointer and addAndMakeVisible().
     openButton = std::make_unique<TextButton>("openButton");
     addAndMakeVisible(openButton.get());
     openButton->setButtonText("Open Audio File...");
@@ -61,7 +53,7 @@ state(TransportState::NoFile)
     transportSource.addChangeListener(this);
     
     setSize (1280, 720);
-    setOpaque(false);
+    setOpaque(false);//波形のグラデーション表示のためにアルファを有効にする。
 }
 
 MainContentComponent::~MainContentComponent()
@@ -72,13 +64,7 @@ MainContentComponent::~MainContentComponent()
 //==============================================================================
 void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // This function will be called when the audio device is started, or when
-    // its settings (i.e. sample rate, block size, etc) are changed.
     
-    // You can use this function to initialise any resources you might need,
-    // but be careful - it will be called on the audio thread, not the GUI thread.
-    
-    // For more details, see the help for AudioProcessor::prepareToPlay()
 }
 
 void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
