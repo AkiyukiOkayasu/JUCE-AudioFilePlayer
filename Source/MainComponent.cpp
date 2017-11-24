@@ -127,7 +127,7 @@ void MainContentComponent::openButtonClicked()
 {
     FileChooser chooser("Select a audio file to play...",
                         File::nonexistent,
-                        "*.wav; *.wave; *.aif; *.aiff");
+                        formatManager.getWildcardForAllFormats());
     if(chooser.browseForFileToOpen())
     {
         File file(chooser.getResult());
